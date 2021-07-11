@@ -352,9 +352,10 @@ public class Application extends android.app.Application {
     synchronized void findDictionaries(
             final DictionaryDiscoveryCallback callback) {
         if (discoveryThread != null) {
-            throw new RuntimeException(
-                    "Dictionary discovery is already running");
+            Log.w(TAG, "Dictionary discovery is already running");
+            return;
         }
+        callback.onDiscoveryStarting();
         dictionaries.clear();
         discoveryThread = new Thread(new Runnable() {
             @Override
@@ -513,7 +514,7 @@ public class Application extends android.app.Application {
                     }
                 }
                 catch (Exception ex) {
-                    Log.w(TAG, ex);
+                    Log.w(TAG, String.format("Dictionary %s (%s) has no uri tag", slob.getId(), slob.getTags()), ex);
                 }
             }
 
